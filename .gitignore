@@ -1,0 +1,18 @@
+# Ignorar o ambiente virtual (pesado e desnecessário na nuvem)
+venv/
+.venv/
+env/
+
+# Ignorar arquivos compilados do Python (lixo gerado automaticamente)
+__pycache__/
+*.pyc
+
+# Ignorar banco de dados local (segurança)
+db.sqlite3
+
+# Ignorar variáveis de ambiente (onde ficam suas senhas)
+.env
+
+# Ignorar pastas de IDE
+.vscode/
+.idea/
