@@ -22,7 +22,7 @@ class Video(models.Model):
     class Meta:
         verbose_name = "Vídeo"
         verbose_name_plural = "Vídeos"
-        ordering = ['-upload_date']  # Ordenar por data de upload decrescente
+        ordering = ['-upload_date']  # Orde nar por data de upload decrescente
         
 
 #CLASSE RETENÇÃO

@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from core.views import upload_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('upload/', upload_view, name='upload'),  # Rota para a view de upload
 ]
