@@ -3,7 +3,6 @@
 > Projeto desenvolvido como parte do Trabalho de Conclusão de Curso (TCC) em Sistemas de Informação.
 
 ![Preview do Projeto](docs/preview.JPG)
-*(Nota: Adicione uma imagem na pasta 'docs' com o nome 'preview.png' ou altere o caminho acima)*
 
 ## 📝 Sobre o Projeto
 
