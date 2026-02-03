@@ -24,18 +24,42 @@
             <p class="text-gray-400 mt-2 text-sm">Alimente a IA com seus dados do TikTok (.csv ou .xlsx)</p>
         </div>
 
-        <form method="post" enctype="multipart/form-data" class="space-y-6">
+        <form method="post" enctype="multipart/form-data" class="space-y-6" id="upload-form">
             {% csrf_token %}
             
             <div class="relative group">
-                <input type="file" name="arquivo_csv" required accept=".csv, .xlsx" 
+                <input type="file" name="arquivo_csv" id="file-input" required accept=".csv, .xlsx" 
                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                <div class="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-blue-500 transition-colors group-hover:bg-gray-700/50">
+                <div id="upload-area" class="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-blue-500 transition-colors group-hover:bg-gray-700/50">
                     <p class="text-sm text-gray-400 group-hover:text-blue-400 transition-colors">
                         Clique ou arraste seu arquivo aqui
                     </p>
                     <p class="text-xs text-gray-500 mt-1">Suporta CSV e Excel</p>
                 </div>
+            </div>
+
+            <!-- File preview container -->
+            <div id="file-preview" class="hidden bg-gray-700/50 border border-gray-600 rounded-lg p-4 space-y-3">
+                <div class="flex items-center gap-4">
+                    <!-- File Icon -->
+                    <div id="file-icon" class="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-600/20 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <!-- File Info -->
+                    <div class="flex-1">
+                        <p id="file-name" class="text-sm font-semibold text-white truncate"></p>
+                        <p id="file-size" class="text-xs text-gray-400"></p>
+                    </div>
+                    <!-- Remove button -->
+                    <button type="button" id="remove-file" class="text-gray-400 hover:text-red-400 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="text-xs text-green-400">✓ Arquivo selecionado e pronto para processar</div>
             </div>
 
             <button type="submit" 
@@ -57,6 +81,91 @@
             VRIS System v1.0 • Powered by Django & Pandas
         </p>
     </div>
+
+    <script>
+        // Get elements
+        const fileInput = document.getElementById('file-input');
+        const uploadArea = document.getElementById('upload-area');
+        const filePreview = document.getElementById('file-preview');
+        const fileName = document.getElementById('file-name');
+        const fileSize = document.getElementById('file-size');
+        const removeFileBtn = document.getElementById('remove-file');
+        const uploadForm = document.getElementById('upload-form');
+
+        // Function to get file icon based on extension
+        function getFileIcon(filename) {
+            const extension = filename.split('.').pop().toLowerCase();
+            const iconContainer = document.getElementById('file-icon');
+            
+            if (extension === 'csv') {
+                iconContainer.innerHTML = '<svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>';
+                iconContainer.classList.add('bg-green-600/20');
+                iconContainer.classList.remove('bg-blue-600/20');
+            } else if (extension === 'xlsx' || extension === 'xls') {
+                iconContainer.innerHTML = '<svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 5h6m-1 4v6m0 0v2m0-2H9m6 0h2m0 0v2m0-2H9m0-6h6m6 0a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h14z"></path></svg>';
+                iconContainer.classList.add('bg-emerald-600/20');
+                iconContainer.classList.remove('bg-blue-600/20');
+            }
+        }
+
+        // Function to format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // Function to display file preview
+        function displayFilePreview() {
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                getFileIcon(file.name);
+                filePreview.classList.remove('hidden');
+                uploadArea.style.display = 'none';
+            }
+        }
+
+        // Function to reset file input
+        function resetFileInput() {
+            fileInput.value = '';
+            filePreview.classList.add('hidden');
+            uploadArea.style.display = 'block';
+        }
+
+        // Event listeners
+        fileInput.addEventListener('change', displayFilePreview);
+
+        removeFileBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            resetFileInput();
+        });
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('border-blue-500', 'bg-blue-900/20');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('border-blue-500', 'bg-blue-900/20');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('border-blue-500', 'bg-blue-900/20');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                const event = new Event('change', { bubbles: true });
+                fileInput.dispatchEvent(event);
+            }
+        });
+    </script>
 
 </body>
 </html>
