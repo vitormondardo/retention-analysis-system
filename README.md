@@ -2,8 +2,8 @@
 
 > Projeto desenvolvido como parte do Trabalho de Conclusão de Curso (TCC) em Sistemas de Informação.
 
-![Preview do Projeto](docs/preview.JPG)
-*(Nota: Adicione uma imagem na pasta 'docs' com o nome 'preview.png' ou altere o caminho acima)*
+![Preview do Projeto](docs/uploadETL.gif)
+![Preview do Projeto](docs/djangoAdministration.gif)
 
 ## 📝 Sobre o Projeto
 
@@ -32,6 +32,8 @@ Durante o desenvolvimento, implementamos pipelines de tratamento para lidar com 
 * **Sanitização:** Limpeza automática de células vazias ou corrompidas antes da inserção no banco de dados.
 
 ## 🚀 Como Executar o Projeto
+
+![Preview do Projeto](docs/poetryRun.gif)
 
 Siga os passos abaixo para configurar o ambiente de desenvolvimento localmente.
 
