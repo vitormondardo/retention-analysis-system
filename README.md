@@ -2,8 +2,12 @@
 
 > Projeto desenvolvido como parte do Trabalho de Conclusão de Curso (TCC) em Sistemas de Informação.
 
+<<<<<<< HEAD
 ![Preview do Projeto](docs/uploadETL.gif)
 ![Preview do Projeto](docs/djangoAdministration.gif)
+=======
+![Preview do Projeto](docs/preview.JPG)
+>>>>>>> f3613473b83caabdc192cd71d1cb1b6a84ec3d25
 
 ## 📝 Sobre o Projeto
 
